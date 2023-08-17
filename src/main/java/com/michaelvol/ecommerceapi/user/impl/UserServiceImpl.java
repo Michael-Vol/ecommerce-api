@@ -26,12 +26,14 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    public void registerUser(User user) {
+    public void registerUser(User user) throws BadRequestException {
         boolean userAlreadyExists = userRepository.findUserByEmail(user.getEmail()).isPresent();
 
         if (userAlreadyExists) {
             throw new BadRequestException("User with email " + user.getEmail() + " already exists");
         }
+        
+
     }
 
 
