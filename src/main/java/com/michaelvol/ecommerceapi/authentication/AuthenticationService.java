@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
     private final UserService userService;
 
-    public void registerUser(UserRegisterRequest request) {
+    public User registerUser(UserRegisterRequest request) {
         User user = User
                 .builder()
                 .firstName(request.getFirstName())
@@ -21,7 +21,7 @@ public class AuthenticationService {
                 .password(request.getPassword())
                 .address(request.getAddress())
                 .build();
-        userService.registerUser(user);
+        return userService.registerUser(user);
     }
 
 }
