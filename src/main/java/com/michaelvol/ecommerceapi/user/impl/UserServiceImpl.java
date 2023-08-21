@@ -5,17 +5,18 @@ import com.michaelvol.ecommerceapi.exception.exceptions.BadRequestException;
 import com.michaelvol.ecommerceapi.user.User;
 import com.michaelvol.ecommerceapi.user.UserRepository;
 import com.michaelvol.ecommerceapi.user.UserService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

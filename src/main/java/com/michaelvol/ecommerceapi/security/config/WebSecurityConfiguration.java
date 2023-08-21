@@ -26,6 +26,7 @@ public class WebSecurityConfiguration {
     private final UserService userService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Bean
     public SecurityFilterChain httpFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(Customizer.withDefaults())
