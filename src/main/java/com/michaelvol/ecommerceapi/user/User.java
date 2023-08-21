@@ -37,6 +37,11 @@ public class User implements UserDetails {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @NotBlank(message = "Username is required")
+    @Max(value = 40, message = "Username must be less than 40 characters")
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
+
     @NotBlank(message = "Email is required")
     @Email(message = "Email must be valid")
     @Column(name = "email", nullable = false, unique = true)
