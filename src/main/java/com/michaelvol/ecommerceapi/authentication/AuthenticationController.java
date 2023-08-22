@@ -1,6 +1,7 @@
 package com.michaelvol.ecommerceapi.authentication;
 
 
+import com.michaelvol.ecommerceapi.authentication.dto.JwtToken;
 import com.michaelvol.ecommerceapi.authentication.dto.UserRegisterRequest;
 import com.michaelvol.ecommerceapi.authentication.dto.UserRegisterResponse;
 import com.michaelvol.ecommerceapi.user.User;
@@ -22,13 +23,13 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<UserRegisterResponse> register(@Valid @RequestBody UserRegisterRequest request) {
         User user = authenticationService.registerUser(request);
-
-
+        JwtToken jwtToken = authenticationService.generateToken(user);
         UserRegisterResponse response = UserRegisterResponse.builder()
                 .id(user.getId())
                 .message("User with id " + user.getId() + " created")
+                .token(jwtToken.getToken())
                 .build();
-        
-        return new ResponseEntity<UserRegisterResponse>(response, HttpStatus.CREATED);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

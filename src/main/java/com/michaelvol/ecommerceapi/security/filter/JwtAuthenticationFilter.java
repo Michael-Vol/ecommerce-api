@@ -1,6 +1,6 @@
 package com.michaelvol.ecommerceapi.security.filter;
 
-import com.michaelvol.ecommerceapi.security.JWTService;
+import com.michaelvol.ecommerceapi.security.JwtService;
 import com.michaelvol.ecommerceapi.user.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,7 +20,7 @@ import java.io.IOException;
 @Component
 @AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final JWTService jwtService;
+    private final JwtService jwtService;
     private final UserService userService;
 
     @Override

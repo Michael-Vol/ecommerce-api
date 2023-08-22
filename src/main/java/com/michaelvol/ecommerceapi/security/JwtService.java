@@ -18,7 +18,7 @@ import java.util.function.Function;
 import static com.michaelvol.ecommerceapi.utils.AppConstants.JWT_TOKEN_VALIDITY;
 
 @Service
-public class JWTService {
+public class JwtService {
     @Value("${ecommerce.api.jwtSecret}")
     private String secretKey;
 

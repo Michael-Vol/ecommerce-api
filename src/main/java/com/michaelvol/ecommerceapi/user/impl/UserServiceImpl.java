@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         User savedUser = userRepository.save(user);
-        return user;
+        return savedUser;
     }
 
     @Override

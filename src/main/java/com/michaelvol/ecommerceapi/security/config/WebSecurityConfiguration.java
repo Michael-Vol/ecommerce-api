@@ -32,7 +32,7 @@ public class WebSecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v*/register/**")
+                        .requestMatchers("/api/v*/auth/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
@@ -40,7 +40,6 @@ public class WebSecurityConfiguration {
                 .authenticationProvider(daoAuthenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-
     }
 
     @Bean
