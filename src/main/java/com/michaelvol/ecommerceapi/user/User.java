@@ -1,10 +1,7 @@
 package com.michaelvol.ecommerceapi.user;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,17 +25,17 @@ public class User implements UserDetails {
     private Long id;
 
     @NotBlank(message = "First name is required")
-    @Max(value = 40, message = "First name must be less than 40 characters")
+    @Size(max = 40, message = "First name must be less than 40 characters")
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @NotBlank(message = "Last name is required")
-    @Max(value = 40, message = "Last name must be less than 40 characters")
+    @Size(max = 40, message = "Last name must be less than 40 characters")
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @NotBlank(message = "Username is required")
-    @Max(value = 40, message = "Username must be less than 40 characters")
+    @Size(max = 20, message = "Username must be less than 40 characters")
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 

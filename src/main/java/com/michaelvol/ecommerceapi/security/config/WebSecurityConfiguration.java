@@ -32,7 +32,7 @@ public class WebSecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v*/auth/**")
+                        .requestMatchers("/api/v**/auth/**", "/error")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
