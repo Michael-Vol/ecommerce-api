@@ -1,9 +1,7 @@
 package com.michaelvol.ecommerceapi.authentication;
 
 
-import com.michaelvol.ecommerceapi.authentication.dto.JwtToken;
-import com.michaelvol.ecommerceapi.authentication.dto.UserRegisterRequest;
-import com.michaelvol.ecommerceapi.authentication.dto.UserRegisterResponse;
+import com.michaelvol.ecommerceapi.authentication.dto.*;
 import com.michaelvol.ecommerceapi.user.User;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -33,5 +31,18 @@ public class AuthenticationController {
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserLoginResponse> login(@Valid @RequestBody UserLoginRequest request) {
+        User user = authenticationService.authenticateUser(request);
+        JwtToken jwtToken = authenticationService.generateToken(user);
+        UserLoginResponse response = UserLoginResponse
+                .builder()
+                .id(user.getId())
+                .message("User with id " + user.getId() + " logged in successfully")
+                .token(jwtToken.getToken())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
