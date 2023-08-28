@@ -45,7 +45,7 @@ public class User implements UserDetails {
     private String email;
 
     @NotBlank(message = "Password is required")
-    @Min(value = 8, message = "Password must be at least 8 characters")
+    @Size(min = 8, message = "Password must be at least 8 characters")
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -62,16 +62,6 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
         return Collections.singletonList(authority);
-    }
-
-    @Override
-    public String getPassword() {
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
     }
 
     @Override

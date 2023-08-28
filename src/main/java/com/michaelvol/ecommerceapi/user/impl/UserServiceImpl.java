@@ -5,18 +5,20 @@ import com.michaelvol.ecommerceapi.exception.exceptions.BadRequestException;
 import com.michaelvol.ecommerceapi.user.User;
 import com.michaelvol.ecommerceapi.user.UserRepository;
 import com.michaelvol.ecommerceapi.user.UserService;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -43,24 +45,10 @@ public class UserServiceImpl implements UserService {
         if (!usernameIsAvailable)
             throw new BadRequestException("Username " + requestedUser.getUsername() + " is not available");
 
-        String firstName = requestedUser.getFirstName();
-        String lastName = requestedUser.getLastName();
-        String username = requestedUser.getUsername();
-        String email = requestedUser.getEmail();
-        String password = requestedUser.getPassword();
-
-        password = passwordEncoder.encode(password);
-
-        User user = User.builder()
-                .firstName(firstName)
-                .lastName(lastName)
-                .username(username)
-                .email(email)
-                .password(password)
-                .role(requestedUser.getRole())
-                .build();
-
-        User savedUser = userRepository.save(user);
+        //Encode Password
+        String encodedPassword = passwordEncoder.encode(requestedUser.getPassword());
+        requestedUser.setPassword(encodedPassword);
+        User savedUser = userRepository.save(requestedUser);
         return savedUser;
     }
 
