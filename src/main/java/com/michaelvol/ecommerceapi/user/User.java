@@ -1,7 +1,9 @@
 package com.michaelvol.ecommerceapi.user;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -53,9 +55,12 @@ public class User implements UserDetails {
     private String address;
 
     @Enumerated(value = EnumType.STRING)
+    @Builder.Default
     private UserRole role = UserRole.USER;
 
+    @Builder.Default
     private Boolean locked = false;
+    @Builder.Default
     private Boolean enabled = false;
 
     @Override
