@@ -3,6 +3,7 @@ package com.michaelvol.ecommerceapi.authentication;
 import com.michaelvol.ecommerceapi.authentication.dto.JwtToken;
 import com.michaelvol.ecommerceapi.authentication.dto.UserLoginRequest;
 import com.michaelvol.ecommerceapi.authentication.dto.UserRegisterRequest;
+import com.michaelvol.ecommerceapi.exception.exceptions.BadRequestException;
 import com.michaelvol.ecommerceapi.security.JwtService;
 import com.michaelvol.ecommerceapi.user.User;
 import com.michaelvol.ecommerceapi.user.UserService;
@@ -43,7 +44,15 @@ public class AuthenticationService {
         return new JwtToken(token);
     }
 
-    public User authenticateUser(UserLoginRequest request) throws UsernameNotFoundException {
+    public User authenticateUser(UserLoginRequest request) throws UsernameNotFoundException, BadRequestException {
+
+        //Check if user is already logged in
+        Boolean userIsLoggedIn = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+        if (userIsLoggedIn)
+            throw new BadRequestException("User is already logged in");
+
+
+        //Authenticate User
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),
                         request.getPassword()));
@@ -52,7 +61,6 @@ public class AuthenticationService {
         //Check for User Existence in DB
         User user = userService.getUserByEmail(request.getEmail());
         return user;
-
     }
 
 
