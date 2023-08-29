@@ -33,12 +33,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authenticationHeader = request.getHeader("Authorization");
 
         // Token Existence Check
-        if (authenticationHeader == null || !authenticationHeader.startsWith("Bearer ")){
+        if (authenticationHeader == null || !authenticationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
         // Security Context Check
-        if (SecurityContextHolder.getContext().getAuthentication() != null){
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -46,14 +46,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         jwtToken = authenticationHeader.substring(7);
         email = jwtService.getUsername(jwtToken);
-        // Email Existence && Token Validity Check
-        if (email.isEmpty() || jwtService.isTokenValid(jwtToken, email)) {
+        // Username Existence && Token Validity Check
+        if (email.isEmpty() || !jwtService.isTokenValid(jwtToken, email)) {
             filterChain.doFilter(request, response);
             return;
         }
 
         // Set Authentication
-        UserDetails userDetails = userService.loadUserByUsername(email);
+        UserDetails userDetails = userService.getUserByEmail(email);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(email, null, userDetails.getAuthorities());
         usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

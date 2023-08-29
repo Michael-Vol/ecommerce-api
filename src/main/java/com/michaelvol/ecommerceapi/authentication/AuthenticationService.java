@@ -1,5 +1,6 @@
 package com.michaelvol.ecommerceapi.authentication;
 
+import com.michaelvol.ecommerceapi.authentication.dao.AuthenticatedUserInfo;
 import com.michaelvol.ecommerceapi.authentication.dto.JwtToken;
 import com.michaelvol.ecommerceapi.authentication.dto.UserLoginRequest;
 import com.michaelvol.ecommerceapi.authentication.dto.UserRegisterRequest;
@@ -7,7 +8,6 @@ import com.michaelvol.ecommerceapi.exception.exceptions.BadRequestException;
 import com.michaelvol.ecommerceapi.security.JwtService;
 import com.michaelvol.ecommerceapi.user.User;
 import com.michaelvol.ecommerceapi.user.UserService;
-import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,17 +39,23 @@ public class AuthenticationService {
         return userService.registerUser(user);
     }
 
-    public JwtToken generateToken(@Nonnull User user) {
+    public JwtToken generateToken(Authentication authentication) {
+        String token = jwtService.generateToken(new HashMap<>(), authentication);
+        return new JwtToken(token);
+    }
+
+    public JwtToken generateToken(User user) {
         String token = jwtService.generateToken(new HashMap<>(), user);
         return new JwtToken(token);
     }
 
-    public User authenticateUser(UserLoginRequest request) throws UsernameNotFoundException, BadRequestException {
+    public AuthenticatedUserInfo authenticateUser(UserLoginRequest request) throws UsernameNotFoundException,
+            BadRequestException {
 
-        //Check if user is already logged in
-        Boolean userIsLoggedIn = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
-        if (userIsLoggedIn)
-            throw new BadRequestException("User is already logged in");
+        //        //Check if user is already logged in
+        //        Boolean userIsLoggedIn = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+        //        if (userIsLoggedIn)
+        //            throw new BadRequestException("User is already logged in");
 
 
         //Authenticate User
@@ -60,8 +66,12 @@ public class AuthenticationService {
 
         //Check for User Existence in DB
         User user = userService.getUserByEmail(request.getEmail());
-        return user;
-    }
 
+        AuthenticatedUserInfo authenticatedUserInfo = AuthenticatedUserInfo.builder()
+                .user(user)
+                .authentication(authentication)
+                .build();
+        return authenticatedUserInfo;
+    }
 
 }

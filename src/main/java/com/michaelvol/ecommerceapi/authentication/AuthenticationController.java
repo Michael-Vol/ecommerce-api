@@ -1,12 +1,17 @@
 package com.michaelvol.ecommerceapi.authentication;
 
 
+import com.michaelvol.ecommerceapi.authentication.dao.AuthenticatedUserInfo;
 import com.michaelvol.ecommerceapi.authentication.dto.*;
 import com.michaelvol.ecommerceapi.user.User;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,14 +40,22 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<UserLoginResponse> login(@Valid @RequestBody UserLoginRequest request) {
-        User user = authenticationService.authenticateUser(request);
-        JwtToken jwtToken = authenticationService.generateToken(user);
+        AuthenticatedUserInfo authenticatedUserInfo = authenticationService.authenticateUser(request);
+        Long userId = authenticatedUserInfo.getUser().getId();
+        JwtToken jwtToken = authenticationService.generateToken(authenticatedUserInfo.getAuthentication());
         UserLoginResponse response = UserLoginResponse
                 .builder()
-                .id(user.getId())
-                .message("User with id " + user.getId() + " logged in successfully")
+                .id(userId)
+                .message("User with id " + userId + " logged in successfully")
                 .token(jwtToken.getToken())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/logout")
+    public String logout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
+        SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
+        securityContextLogoutHandler.logout(request, response, authentication);
+        return "User logged out successfully";
     }
 }
