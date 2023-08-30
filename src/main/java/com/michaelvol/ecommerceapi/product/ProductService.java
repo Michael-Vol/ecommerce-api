@@ -1,11 +1,9 @@
 package com.michaelvol.ecommerceapi.product;
 
 import com.michaelvol.ecommerceapi.product.dto.CreateProductRequest;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
 public interface ProductService {
     Product save(Product product);
 

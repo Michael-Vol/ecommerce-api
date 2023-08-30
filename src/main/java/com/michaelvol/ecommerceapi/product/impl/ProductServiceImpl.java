@@ -8,9 +8,11 @@ import com.michaelvol.ecommerceapi.product.dto.CreateProductRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 @AllArgsConstructor
 @Data
 @Builder
@@ -21,16 +23,17 @@ public class ProductServiceImpl implements ProductService {
     public Product save(Product product) {
         return productRepository.save(product);
     }
+
     @Override
     public Optional<Product> findById(Long id) {
         return Optional.empty();
     }
 
-    public Product create(CreateProductRequest request)  throws BadRequestException{
+    public Product create(CreateProductRequest request) throws BadRequestException {
         //Check if the product already exists
         Boolean productExists = productRepository.findProductByTitle(request.getTitle()).isPresent();
 
-        if(productExists)
+        if (productExists)
             throw new BadRequestException("Product with title " + request.getTitle() + " already exists");
 
         Product product = Product
@@ -39,8 +42,8 @@ public class ProductServiceImpl implements ProductService {
                 .description(request.getDescription())
                 .imageUrl(request.getImageUrl())
                 .price(request.getPrice())
-                .quantity(request.getQuantity())
-                .isAvailable(request.getIsAvailable())
+                .quantity(request.getQuantity() == null ? 1 : request.getQuantity())
+                .isAvailable(request.getIsAvailable() == null ? true : request.getIsAvailable())
                 .build();
 
         Product savedProduct = productRepository.save(product);
@@ -49,12 +52,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Iterable<Product> findAll() {
-        return null;
+        return productRepository.findAll();
     }
+
     @Override
     public void deleteById(Long id) {
-
+        productRepository.deleteById(id);
     }
+
     @Override
     public Product update(Product product) {
         return null;

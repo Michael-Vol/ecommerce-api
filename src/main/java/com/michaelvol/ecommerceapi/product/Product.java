@@ -2,6 +2,8 @@ package com.michaelvol.ecommerceapi.product;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,10 +38,11 @@ public class Product {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @NotBlank(message = "Price is required")
+    @Positive(message = "Price must be greater than 0")
     @Column(name = "price", nullable = false)
     private Double price;
 
+    @PositiveOrZero(message = "Quantity must be greater than or equal to 0")
     @Column(name = "quantity", nullable = false)
     @Builder.Default
     private Integer quantity = 1;

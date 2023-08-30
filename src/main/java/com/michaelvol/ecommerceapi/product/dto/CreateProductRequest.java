@@ -2,6 +2,8 @@ package com.michaelvol.ecommerceapi.product.dto;
 
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,9 +26,10 @@ public class CreateProductRequest {
     @URL(message = "Image URL must be valid")
     private String imageUrl;
 
-    @NotBlank(message = "Price is required")
+    @Positive(message = "Price must be greater than 0")
     private Double price;
 
+    @PositiveOrZero(message = "Quantity must be greater than or equal to 0")
     private Integer quantity;
 
     private Boolean isAvailable;

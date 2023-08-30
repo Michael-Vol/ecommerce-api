@@ -2,10 +2,12 @@ package com.michaelvol.ecommerceapi.product;
 
 import com.michaelvol.ecommerceapi.product.dto.CreateProductRequest;
 import com.michaelvol.ecommerceapi.product.dto.CreateProductResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,8 +18,9 @@ import static com.michaelvol.ecommerceapi.utils.AppConstants.API_BASE_URL;
 @AllArgsConstructor
 public class ProductController {
     private final ProductService productService;
+
     @PostMapping("/new")
-    public ResponseEntity<CreateProductResponse> createProduct(CreateProductRequest createProductRequest) {
+    public ResponseEntity<CreateProductResponse> createProduct(@Valid @RequestBody CreateProductRequest createProductRequest) {
         Product product = productService.create(createProductRequest);
         CreateProductResponse response = CreateProductResponse
                 .builder()
