@@ -50,6 +50,10 @@ public class ProductServiceImpl implements ProductService {
         return savedProduct;
     }
 
+    public Iterable<Product> search(String query) {
+        return productRepository.findProductsByTitleContaining(query);
+    }
+
     @Override
     public Iterable<Product> findAll() {
         return productRepository.findAll();
@@ -64,4 +68,5 @@ public class ProductServiceImpl implements ProductService {
     public Product update(Product product) {
         return null;
     }
+
 }

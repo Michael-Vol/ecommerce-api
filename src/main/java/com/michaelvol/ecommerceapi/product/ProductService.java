@@ -16,4 +16,6 @@ public interface ProductService {
     void deleteById(Long id);
 
     Product update(Product product);
+
+    Iterable<Product> search(String query);
 }

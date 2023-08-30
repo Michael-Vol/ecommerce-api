@@ -6,10 +6,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.michaelvol.ecommerceapi.utils.AppConstants.API_BASE_URL;
 
@@ -30,6 +27,23 @@ public class ProductController {
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
+    @GetMapping("/all")
+    public ResponseEntity<Iterable<Product>> getAllProducts() {
+        Iterable<Product> products = productService.findAll();
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+        Product product = productService.findById(id).orElse(null);
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
+    @GetMapping("/search/{query}")
+    public ResponseEntity<Iterable<Product>> searchProducts(@RequestParam String query) {
+        Iterable<Product> products = productService.search(query);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }
