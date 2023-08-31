@@ -34,6 +34,10 @@ public class Product {
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
+    @NotBlank(message = "Category is required")
+    @Enumerated(EnumType.STRING)
+    private ProductCategory category;
+
     @URL(message = "Image URL must be valid")
     @Column(name = "image_url")
     private String imageUrl;

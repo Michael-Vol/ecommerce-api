@@ -1,5 +1,6 @@
 package com.michaelvol.ecommerceapi.product;
 
+import com.michaelvol.ecommerceapi.exception.exceptions.BadRequestException;
 import com.michaelvol.ecommerceapi.product.dto.CreateProductRequest;
 import com.michaelvol.ecommerceapi.product.dto.CreateProductResponse;
 import jakarta.validation.Valid;
@@ -37,7 +38,8 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Product product = productService.findById(id).orElse(null);
+        Product product = productService.findById(id)
+                .orElseThrow(() -> new BadRequestException("Product with id " + id + " not found"));
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
