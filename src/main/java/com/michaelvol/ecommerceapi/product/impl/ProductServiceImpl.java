@@ -4,10 +4,15 @@ import com.michaelvol.ecommerceapi.exception.exceptions.BadRequestException;
 import com.michaelvol.ecommerceapi.product.Product;
 import com.michaelvol.ecommerceapi.product.ProductRepository;
 import com.michaelvol.ecommerceapi.product.ProductService;
+import com.michaelvol.ecommerceapi.product.QProduct;
 import com.michaelvol.ecommerceapi.product.dto.CreateProductRequest;
+import com.michaelvol.ecommerceapi.product.dto.ProductSearchQuery;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -50,8 +55,26 @@ public class ProductServiceImpl implements ProductService {
         return savedProduct;
     }
 
-    public Iterable<Product> search(String query) {
-        return productRepository.findProductsByTitleContaining(query);
+    public Iterable<Product> search(ProductSearchQuery query) {
+        String keyword = query.getKeyword();
+        String category = query.getCategory().name();
+        String sortBy = query.getSortBy();
+        Sort.Direction sortDirection = query.getSortDirection();
+
+        //Pagination
+        Integer page = query.getPage();
+        Integer pageSize = query.getPageSize();
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sortDirection, sortBy));
+
+        QProduct product = QProduct.product;
+        productRepository.findAll(product
+                        .title.contains(keyword)
+                        .or(product.description.contains(keyword))
+                        .or(product.category.stringValue().equalsIgnoreCase(category))
+                        .and(product.price.between(query.getMinPrice(), query.getMaxPrice()))
+                , pageable
+        );
+        return null;
     }
 
     @Override

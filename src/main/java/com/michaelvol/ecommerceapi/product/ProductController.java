@@ -3,6 +3,7 @@ package com.michaelvol.ecommerceapi.product;
 import com.michaelvol.ecommerceapi.exception.exceptions.BadRequestException;
 import com.michaelvol.ecommerceapi.product.dto.CreateProductRequest;
 import com.michaelvol.ecommerceapi.product.dto.CreateProductResponse;
+import com.michaelvol.ecommerceapi.product.dto.ProductSearchQuery;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,7 +45,7 @@ public class ProductController {
     }
 
     @GetMapping("/search/{query}")
-    public ResponseEntity<Iterable<Product>> searchProducts(@RequestParam String query) {
+    public ResponseEntity<Iterable<Product>> searchProducts(@RequestParam ProductSearchQuery query) {
         Iterable<Product> products = productService.search(query);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }

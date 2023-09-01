@@ -1,6 +1,7 @@
 package com.michaelvol.ecommerceapi.product;
 
 import com.michaelvol.ecommerceapi.product.dto.CreateProductRequest;
+import com.michaelvol.ecommerceapi.product.dto.ProductSearchQuery;
 
 import java.util.Optional;
 
@@ -17,5 +18,5 @@ public interface ProductService {
 
     Product update(Product product);
 
-    Iterable<Product> search(String query);
+    Iterable<Product> search(ProductSearchQuery query);
 }
