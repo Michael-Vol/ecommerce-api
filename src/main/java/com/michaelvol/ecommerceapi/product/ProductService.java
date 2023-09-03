@@ -3,6 +3,7 @@ package com.michaelvol.ecommerceapi.product;
 import com.michaelvol.ecommerceapi.product.dto.CreateProductRequest;
 import com.michaelvol.ecommerceapi.product.dto.PageableProductQuery;
 import com.michaelvol.ecommerceapi.product.dto.ProductSearchQuery;
+import com.michaelvol.ecommerceapi.product.dto.UpdateProductRequest;
 
 import java.util.Optional;
 
@@ -19,7 +20,7 @@ public interface ProductService {
 
     void deleteById(Long id);
 
-    Product update(Product product);
+    Product update(UpdateProductRequest request, Product currentProduct);
 
     Iterable<Product> search(ProductSearchQuery query);
 }

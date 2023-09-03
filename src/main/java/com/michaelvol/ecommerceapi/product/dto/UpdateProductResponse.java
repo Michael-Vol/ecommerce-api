@@ -1,11 +1,11 @@
 package com.michaelvol.ecommerceapi.product.dto;
 
 import com.michaelvol.ecommerceapi.product.Product;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Builder
 @Data
 public class UpdateProductResponse {

@@ -1,13 +1,12 @@
 package com.michaelvol.ecommerceapi.product.impl;
 
 import com.michaelvol.ecommerceapi.exception.exceptions.BadRequestException;
-import com.michaelvol.ecommerceapi.product.Product;
-import com.michaelvol.ecommerceapi.product.ProductRepository;
-import com.michaelvol.ecommerceapi.product.ProductService;
-import com.michaelvol.ecommerceapi.product.QProduct;
+import com.michaelvol.ecommerceapi.product.*;
 import com.michaelvol.ecommerceapi.product.dto.CreateProductRequest;
 import com.michaelvol.ecommerceapi.product.dto.PageableProductQuery;
 import com.michaelvol.ecommerceapi.product.dto.ProductSearchQuery;
+import com.michaelvol.ecommerceapi.product.dto.UpdateProductRequest;
+import com.michaelvol.ecommerceapi.product.utils.UpdateProductMapper;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +25,7 @@ import java.util.Optional;
 @Builder
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+    private final UpdateProductMapper mapper;
 
     @Override
     public Product save(Product product) {
@@ -52,6 +52,7 @@ public class ProductServiceImpl implements ProductService {
                 .price(request.getPrice())
                 .quantity(request.getQuantity() == null ? 1 : request.getQuantity())
                 .isAvailable(request.getIsAvailable() == null ? true : request.getIsAvailable())
+                .category(request.getCategory() == null ? ProductCategory.OTHER : request.getCategory())
                 .build();
 
         Product savedProduct = productRepository.save(product);
@@ -103,15 +104,15 @@ public class ProductServiceImpl implements ProductService {
     public void deleteById(Long id) {
         //Check for product existence
         Optional<Product> product = productRepository.findById(id);
-        if (product.isEmpty())
+        if (!product.isPresent())
             throw new BadRequestException("Product with id " + id + " not found");
-
         productRepository.deleteById(id);
     }
 
     @Override
-    public Product update(Product product) {
-        return null;
+    public Product update(UpdateProductRequest request, Product currentProduct) {
+        mapper.updateProductFromDto(request, currentProduct);
+        return productRepository.save(currentProduct);
     }
 
 }

@@ -1,10 +1,7 @@
 package com.michaelvol.ecommerceapi.product;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,7 +31,7 @@ public class Product {
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @NotBlank(message = "Category is required")
+    @NotNull(message = "Category is required")
     @Enumerated(EnumType.STRING)
     private ProductCategory category;
 

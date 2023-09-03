@@ -1,6 +1,7 @@
 package com.michaelvol.ecommerceapi.product.dto;
 
 
+import com.michaelvol.ecommerceapi.product.ProductCategory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -21,6 +22,8 @@ public class CreateProductRequest {
     @NotBlank(message = "Description is required")
     @Size(max = 5000, message = "Description must be less than 5000 characters")
     private String description;
+
+    private ProductCategory category;
 
     @NotBlank(message = "Image URL is required")
     @URL(message = "Image URL must be valid")

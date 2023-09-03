@@ -60,12 +60,12 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<UpdateProductResponse> updateProduct(@PathVariable Long id,
                                                                @Valid @RequestBody UpdateProductRequest request) {
         Product product = productService.findById(id)
                 .orElseThrow(() -> new BadRequestException("Product with id " + id + " not found"));
-        Product updatedProduct = productService.update(product);
+        Product updatedProduct = productService.update(request, product);
         UpdateProductResponse response = UpdateProductResponse
                 .builder()
                 .product(updatedProduct)
