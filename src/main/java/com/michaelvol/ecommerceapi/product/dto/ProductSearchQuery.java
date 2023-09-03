@@ -1,24 +1,26 @@
 package com.michaelvol.ecommerceapi.product.dto;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.michaelvol.ecommerceapi.product.ProductCategory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
 import org.springframework.data.domain.Sort;
 
-@Value
+@Data
+@Jacksonized
 @Builder
+@RequiredArgsConstructor
 @AllArgsConstructor
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ProductSearchQuery {
     @NotBlank(message = "Keyword is required")
     String keyword;
 
-    ProductCategory category;
+    @Builder.Default
+    ProductCategory category = ProductCategory.OTHER;
 
     @Positive(message = "Max price must be greater than 0")
     Double minPrice;
@@ -36,5 +38,6 @@ public class ProductSearchQuery {
     Integer page = 0;
 
     @Builder.Default
-    Integer pageSize = 10;
+    Integer pageSize = 30;
+
 }

@@ -7,9 +7,11 @@ import com.michaelvol.ecommerceapi.product.ProductService;
 import com.michaelvol.ecommerceapi.product.QProduct;
 import com.michaelvol.ecommerceapi.product.dto.CreateProductRequest;
 import com.michaelvol.ecommerceapi.product.dto.ProductSearchQuery;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -57,24 +59,32 @@ public class ProductServiceImpl implements ProductService {
 
     public Iterable<Product> search(ProductSearchQuery query) {
         String keyword = query.getKeyword();
-        String category = query.getCategory().name();
+        //Pagination
         String sortBy = query.getSortBy();
         Sort.Direction sortDirection = query.getSortDirection();
-
-        //Pagination
         Integer page = query.getPage();
         Integer pageSize = query.getPageSize();
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sortDirection, sortBy));
 
         QProduct product = QProduct.product;
-        productRepository.findAll(product
-                        .title.contains(keyword)
-                        .or(product.description.contains(keyword))
-                        .or(product.category.stringValue().equalsIgnoreCase(category))
-                        .and(product.price.between(query.getMinPrice(), query.getMaxPrice()))
-                , pageable
-        );
-        return null;
+
+        BooleanExpression queryPredicate = product.title.contains(keyword)
+                .or(product.description.contains(query.getKeyword()));
+
+        if (query.getCategory() != null) {
+            queryPredicate = queryPredicate.and(product.category.stringValue()
+                    .equalsIgnoreCase(query.getCategory().name()));
+        }
+        if (query.getMinPrice() != null) {
+            queryPredicate = queryPredicate.and(product.price.gt(query.getMinPrice()));
+        }
+        if (query.getMaxPrice() != null) {
+            queryPredicate = queryPredicate.and(product.price.lt(query.getMaxPrice()));
+        }
+
+        Page<Product> productsPage = productRepository.findAll(queryPredicate, pageable);
+
+        return productsPage;
     }
 
     @Override
