@@ -49,9 +49,4 @@ public class ProductController {
         Iterable<Product> products = productService.search(query);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
-
-    @GetMapping("/search2")
-    public ResponseEntity<ProductSearchQuery> searchProducts2(@Valid ProductSearchQuery query) {
-        return new ResponseEntity<>(query, HttpStatus.OK);
-    }
 }
