@@ -6,6 +6,7 @@ import com.michaelvol.ecommerceapi.product.ProductRepository;
 import com.michaelvol.ecommerceapi.product.ProductService;
 import com.michaelvol.ecommerceapi.product.QProduct;
 import com.michaelvol.ecommerceapi.product.dto.CreateProductRequest;
+import com.michaelvol.ecommerceapi.product.dto.PageableProductQuery;
 import com.michaelvol.ecommerceapi.product.dto.ProductSearchQuery;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.AllArgsConstructor;
@@ -87,13 +88,24 @@ public class ProductServiceImpl implements ProductService {
         return productsPage;
     }
 
-    @Override
     public Iterable<Product> findAll() {
         return productRepository.findAll();
     }
 
     @Override
+    public Iterable<Product> findAll(PageableProductQuery query) {
+        Pageable pageable = PageRequest.of(query.getPage(), query.getSize(), Sort.by(query.getDirection(),
+                query.getSortBy()));
+        return productRepository.findAll(pageable);
+    }
+
+    @Override
     public void deleteById(Long id) {
+        //Check for product existence
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isEmpty())
+            throw new BadRequestException("Product with id " + id + " not found");
+
         productRepository.deleteById(id);
     }
 

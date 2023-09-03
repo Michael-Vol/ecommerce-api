@@ -1,9 +1,7 @@
 package com.michaelvol.ecommerceapi.product;
 
 import com.michaelvol.ecommerceapi.exception.exceptions.BadRequestException;
-import com.michaelvol.ecommerceapi.product.dto.CreateProductRequest;
-import com.michaelvol.ecommerceapi.product.dto.CreateProductResponse;
-import com.michaelvol.ecommerceapi.product.dto.ProductSearchQuery;
+import com.michaelvol.ecommerceapi.product.dto.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,8 +30,8 @@ public class ProductController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Iterable<Product>> getAllProducts() {
-        Iterable<Product> products = productService.findAll();
+    public ResponseEntity<Iterable<Product>> getAllProducts(@Valid PageableProductQuery query) {
+        Iterable<Product> products = productService.findAll(query);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
@@ -48,5 +46,17 @@ public class ProductController {
     public ResponseEntity<Iterable<Product>> searchProducts(@Valid ProductSearchQuery query) {
         Iterable<Product> products = productService.search(query);
         return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<DeleteProductResponse> deleteProduct(@PathVariable Long id) {
+        productService.deleteById(id);
+        DeleteProductResponse response = DeleteProductResponse
+                .builder()
+                .id(id)
+                .message("Product with id " + id + " deleted successfully")
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
