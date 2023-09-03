@@ -1,5 +1,6 @@
 package com.michaelvol.ecommerceapi.product;
 
+import com.michaelvol.ecommerceapi.order.Order;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -51,4 +54,8 @@ public class Product {
     @Column(name = "is_available", nullable = false)
     @Builder.Default
     private Boolean isAvailable = true;
+
+    @ManyToMany(mappedBy = "products", fetch = FetchType.EAGER)
+    @Builder.Default
+    private Set<Order> orders = Set.of();
 }

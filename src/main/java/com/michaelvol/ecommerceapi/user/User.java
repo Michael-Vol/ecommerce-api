@@ -1,5 +1,6 @@
 package com.michaelvol.ecommerceapi.user;
 
+import com.michaelvol.ecommerceapi.order.Order;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -53,6 +55,9 @@ public class User implements UserDetails {
 
     @Column(name = "address")
     private String address;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<Order> orders;
 
     @Enumerated(value = EnumType.STRING)
     @Builder.Default
