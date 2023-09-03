@@ -59,4 +59,18 @@ public class ProductController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UpdateProductResponse> updateProduct(@PathVariable Long id,
+                                                               @Valid @RequestBody UpdateProductRequest request) {
+        Product product = productService.findById(id)
+                .orElseThrow(() -> new BadRequestException("Product with id " + id + " not found"));
+        Product updatedProduct = productService.update(product);
+        UpdateProductResponse response = UpdateProductResponse
+                .builder()
+                .product(updatedProduct)
+                .message("Product with id " + id + " updated successfully")
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
