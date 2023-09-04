@@ -1,5 +1,6 @@
 package com.michaelvol.ecommerceapi.user;
 
+import com.michaelvol.ecommerceapi.cart.Cart;
 import com.michaelvol.ecommerceapi.order.Order;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -58,6 +59,10 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Order> orders;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private Cart cart = new Cart();
 
     @Enumerated(value = EnumType.STRING)
     @Builder.Default
