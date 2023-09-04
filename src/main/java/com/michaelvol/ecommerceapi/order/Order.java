@@ -9,7 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.ZonedDateTime;
 import java.util.Set;
 
 @Entity
@@ -48,8 +51,15 @@ public class Order {
     @Builder.Default
     private OrderStatus status = OrderStatus.PENDING;
 
+    @Column(name = "date_created", nullable = false, columnDefinition = "TIMESTAMP")
+    @CreationTimestamp
+    private ZonedDateTime dateCreated;
+
+    @Column(name = "date_updated", nullable = false, columnDefinition = "TIMESTAMP")
+    @UpdateTimestamp
+    private ZonedDateTime dateUpdated;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
 }
