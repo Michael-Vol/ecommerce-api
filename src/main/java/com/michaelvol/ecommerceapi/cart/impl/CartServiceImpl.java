@@ -1,7 +1,10 @@
 package com.michaelvol.ecommerceapi.cart.impl;
 
 import com.michaelvol.ecommerceapi.cart.Cart;
+import com.michaelvol.ecommerceapi.cart.CartRepository;
 import com.michaelvol.ecommerceapi.cart.CartService;
+import com.michaelvol.ecommerceapi.cart.cartitem.CartItemRepository;
+import com.michaelvol.ecommerceapi.exception.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,19 +16,25 @@ import org.springframework.stereotype.Service;
 @Data
 @Builder
 public class CartServiceImpl implements CartService {
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+
     @Override
     public Cart save(Cart cart) {
-        return null;
+        return cartRepository.save(cart);
     }
 
     @Override
-    public Cart getCartById(Long id) {
-        return null;
+    public Cart getCartById(Long id) throws BadRequestException {
+        return cartRepository.findById(id).orElseThrow(
+                () -> new BadRequestException("Cart with id " + id + " not found")
+        );
     }
 
     @Override
     public Cart getCartByUserId(Long userId) {
-        return null;
+        return cartRepository.findByUserId(userId).orElseThrow(
+                () -> new BadRequestException("Cart of user with id " + userId + " not found"));
     }
 
     @Override
