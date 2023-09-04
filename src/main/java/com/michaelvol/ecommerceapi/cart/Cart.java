@@ -4,7 +4,7 @@ package com.michaelvol.ecommerceapi.cart;
 import com.michaelvol.ecommerceapi.cart.cartitem.CartItem;
 import com.michaelvol.ecommerceapi.user.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +34,7 @@ public class Cart {
     private List<CartItem> items = new ArrayList<>();
 
     @Column(name = "total_price", nullable = false)
-    @Positive(message = "Total price must be greater than 0")
-    private Double totalPrice;
+    @PositiveOrZero(message = "Total price must be greater or equal to 0")
+    @Builder.Default
+    private Double totalPrice = 0.0;
 }
