@@ -6,6 +6,10 @@ import com.michaelvol.ecommerceapi.order.OrderRepository;
 import com.michaelvol.ecommerceapi.order.OrderService;
 import com.michaelvol.ecommerceapi.order.OrderStatus;
 import com.michaelvol.ecommerceapi.order.dto.PageableOrderQuery;
+import com.michaelvol.ecommerceapi.order.dto.UpdateOrderRequest;
+import com.michaelvol.ecommerceapi.order.utils.UpdateOrderMapper;
+import com.michaelvol.ecommerceapi.user.User;
+import com.michaelvol.ecommerceapi.user.UserService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +27,8 @@ import java.util.Optional;
 @Builder
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
+    private final UserService userService;
+    private final UpdateOrderMapper mapper;
 
     @Override
     public Order save(Order order) {
@@ -52,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order setOrderStatus(Long id, OrderStatus status) {
+    public Order setOrderStatus(Long id, OrderStatus status) throws BadRequestException {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Order with id " + id + " not found"));
         return setOrderStatus(order, status);
@@ -66,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long id) throws BadRequestException {
         //Check for order existence
         Optional<Order> order = orderRepository.findById(id);
         if (!order.isPresent())
@@ -75,12 +81,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order update(Order order) {
-        return null;
+    public Order update(UpdateOrderRequest request, Order currentOrder) {
+        mapper.updateOrderFromDto(request, currentOrder);
+        return orderRepository.save(currentOrder);
     }
 
     @Override
-    public Order getLatestOrderByUserId(Long userId) {
-        return null;
+    public Order getLatestOrderByUserId(Long userId) throws BadRequestException {
+        User user = userService.getUserById(userId);
+        return orderRepository.findFirstByUserOrderByDateCreatedDesc(user)
+                .orElseThrow(() -> new BadRequestException("No orders found for user with id " + userId));
     }
 }

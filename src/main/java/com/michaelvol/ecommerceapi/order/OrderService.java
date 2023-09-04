@@ -1,6 +1,7 @@
 package com.michaelvol.ecommerceapi.order;
 
 import com.michaelvol.ecommerceapi.order.dto.PageableOrderQuery;
+import com.michaelvol.ecommerceapi.order.dto.UpdateOrderRequest;
 
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ public interface OrderService {
 
     void deleteById(Long id);
 
-    Order update(Order order);
+    Order update(UpdateOrderRequest request, Order order);
 
     Order getLatestOrderByUserId(Long userId);
 }
