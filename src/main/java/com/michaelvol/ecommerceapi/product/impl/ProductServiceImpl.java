@@ -33,8 +33,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> findById(Long id) {
-        return productRepository.findById(id);
+    public Product findById(Long id) throws BadRequestException {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Product with id " + id + " not found"));
     }
 
     public Product create(CreateProductRequest request) throws BadRequestException {

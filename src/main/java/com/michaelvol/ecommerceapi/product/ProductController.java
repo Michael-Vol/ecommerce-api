@@ -1,6 +1,5 @@
 package com.michaelvol.ecommerceapi.product;
 
-import com.michaelvol.ecommerceapi.exception.exceptions.BadRequestException;
 import com.michaelvol.ecommerceapi.product.dto.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -37,8 +36,8 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Product product = productService.findById(id)
-                .orElseThrow(() -> new BadRequestException("Product with id " + id + " not found"));
+        Product product = productService.findById(id);
+
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
@@ -63,8 +62,8 @@ public class ProductController {
     @PatchMapping("/{id}")
     public ResponseEntity<UpdateProductResponse> updateProduct(@PathVariable Long id,
                                                                @Valid @RequestBody UpdateProductRequest request) {
-        Product product = productService.findById(id)
-                .orElseThrow(() -> new BadRequestException("Product with id " + id + " not found"));
+        Product product = productService.findById(id);
+
         Product updatedProduct = productService.update(request, product);
         UpdateProductResponse response = UpdateProductResponse
                 .builder()

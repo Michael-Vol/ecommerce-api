@@ -17,14 +17,16 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CartItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @SequenceGenerator(name = "cart_item_sequence", sequenceName = "cart_item_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cart_item_sequence")
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
 
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
-    
+
     @OneToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;

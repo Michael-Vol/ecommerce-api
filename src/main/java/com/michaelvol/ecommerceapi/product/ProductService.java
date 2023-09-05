@@ -5,14 +5,12 @@ import com.michaelvol.ecommerceapi.product.dto.PageableProductQuery;
 import com.michaelvol.ecommerceapi.product.dto.ProductSearchQuery;
 import com.michaelvol.ecommerceapi.product.dto.UpdateProductRequest;
 
-import java.util.Optional;
-
 public interface ProductService {
     Product save(Product product);
 
     Product create(CreateProductRequest request);
 
-    Optional<Product> findById(Long id);
+    Product findById(Long id);
 
     Iterable<Product> findAll();
 

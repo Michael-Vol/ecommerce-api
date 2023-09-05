@@ -1,14 +1,12 @@
 package com.michaelvol.ecommerceapi.user.impl;
 
 import com.michaelvol.ecommerceapi.authentication.dao.UserAvailability;
+import com.michaelvol.ecommerceapi.cart.Cart;
 import com.michaelvol.ecommerceapi.exception.exceptions.BadRequestException;
 import com.michaelvol.ecommerceapi.user.User;
 import com.michaelvol.ecommerceapi.user.UserRepository;
 import com.michaelvol.ecommerceapi.user.UserService;
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,6 +46,10 @@ public class UserServiceImpl implements UserService {
         //Encode Password
         String encodedPassword = passwordEncoder.encode(requestedUser.getPassword());
         requestedUser.setPassword(encodedPassword);
+
+        //Create User's Cart
+        Cart cart = Cart.builder().user(requestedUser).build();
+        requestedUser.setCart(cart);
         User savedUser = userRepository.save(requestedUser);
         return savedUser;
     }

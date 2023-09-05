@@ -5,10 +5,7 @@ import com.michaelvol.ecommerceapi.cart.cartitem.CartItem;
 import com.michaelvol.ecommerceapi.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +14,8 @@ import java.util.List;
 @Table(name = "carts")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 public class Cart {
     @Id
@@ -31,6 +29,7 @@ public class Cart {
     private User user;
 
     @OneToMany(mappedBy = "cart")
+    @Builder.Default
     private List<CartItem> items = new ArrayList<>();
 
     @Column(name = "total_price", nullable = false)

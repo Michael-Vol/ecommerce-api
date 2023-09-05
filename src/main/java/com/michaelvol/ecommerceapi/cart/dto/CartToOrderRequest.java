@@ -20,6 +20,6 @@ public class CartToOrderRequest {
     @NotBlank(message = "Billing address is required")
     private String billingAddress;
 
-    @NotBlank(message = "Payment method is required")
+    @NotNull(message = "Payment method is required")
     private PaymentMethod paymentMethod;
 }

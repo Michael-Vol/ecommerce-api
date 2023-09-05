@@ -61,8 +61,7 @@ public class User implements UserDetails {
     private Set<Order> orders;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @Builder.Default
-    private Cart cart = new Cart();
+    private Cart cart;
 
     @Enumerated(value = EnumType.STRING)
     @Builder.Default

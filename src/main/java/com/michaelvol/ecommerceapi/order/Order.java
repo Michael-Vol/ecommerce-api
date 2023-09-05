@@ -1,9 +1,11 @@
 package com.michaelvol.ecommerceapi.order;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.michaelvol.ecommerceapi.product.Product;
 import com.michaelvol.ecommerceapi.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,7 +49,7 @@ public class Order {
     private String shippingAddress;
 
     @Column(name = "payment_method", nullable = false)
-    @NotBlank(message = "Payment method is required")
+    @NotNull(message = "Payment method is required")
     private PaymentMethod paymentMethod;
 
     @Column(name = "status", nullable = false)
@@ -65,5 +67,6 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 }

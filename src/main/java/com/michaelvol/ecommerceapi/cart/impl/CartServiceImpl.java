@@ -52,11 +52,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart addItemToCart(Long cartId, Long productId, Integer quantity) throws BadRequestException {
+    public Cart addItemToCart(Long cartId, Long productId, Integer quantity) {
         Cart cart = getCartById(cartId);
-        Product product = productService.findById(productId).orElseThrow(
-                () -> new BadRequestException("Product with id " + productId + " not found")
-        );
+        Product product = productService.findById(productId);
         CartItem cartItem = CartItem
                 .builder()
                 .cart(cart)
@@ -73,12 +71,9 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart removeItemFromCart(Long cartId, Long productId) throws BadRequestException {
         Cart cart = getCartById(cartId);
-/*
-        Product product = productService.findById(productId).orElseThrow(
-                () -> new BadRequestException("Product with id " + productId + " not found")
-        );
-*/
-        CartItem cartItem = cartItemRepository.findByCartAndProduct(cartId, productId).orElseThrow(
+        Product product = productService.findById(productId);
+
+        CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product).orElseThrow(
                 () -> new BadRequestException("Product with id " + productId + " not found in cart with id " + cartId)
         );
         cart.setTotalPrice(cart.getTotalPrice() - (cartItem.getProduct().getPrice() * cartItem.getQuantity()));
@@ -89,9 +84,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart updateItemQuantity(Long cartId, Long productId, Integer quantity) {
+    public Cart updateItemQuantity(Long cartId, Long productId, Integer quantity) throws BadRequestException {
         Cart cart = getCartById(cartId);
-        CartItem cartItem = cartItemRepository.findByCartAndProduct(cartId, productId).orElseThrow(
+        Product product = productService.findById(productId);
+
+        CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product).orElseThrow(
                 () -> new BadRequestException("Product with id " + productId + " not found in cart with id " + cartId)
         );
         Integer diffQuantity = quantity - cartItem.getQuantity();
@@ -136,7 +133,7 @@ public class CartServiceImpl implements CartService {
                 .build();
 
         order = orderService.save(order);
-        clearCart(cart);
+        //        clearCart(cart);
         return order;
     }
 }
