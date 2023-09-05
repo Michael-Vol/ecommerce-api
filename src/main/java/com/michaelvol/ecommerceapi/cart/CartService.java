@@ -1,5 +1,8 @@
 package com.michaelvol.ecommerceapi.cart;
 
+import com.michaelvol.ecommerceapi.cart.dto.CartToOrderRequest;
+import com.michaelvol.ecommerceapi.order.Order;
+
 public interface CartService {
     Cart save(Cart cart);
 
@@ -16,4 +19,6 @@ public interface CartService {
     Cart clearCart(Long cartId);
 
     void deleteCart(Long cartId);
+
+    Order checkout(CartToOrderRequest request);
 }

@@ -46,6 +46,10 @@ public class Order {
     @NotBlank(message = "Shipping address is required")
     private String shippingAddress;
 
+    @Column(name = "payment_method", nullable = false)
+    @NotBlank(message = "Payment method is required")
+    private PaymentMethod paymentMethod;
+
     @Column(name = "status", nullable = false)
     @Enumerated
     @Builder.Default
