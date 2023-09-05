@@ -36,8 +36,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional<Order> findById(Long id) {
-        return orderRepository.findById(id);
+    public Order findById(Long id) throws BadRequestException {
+        return orderRepository.findById(id).orElseThrow(
+                () -> new BadRequestException("Order with id " + id + " not found")
+        );
     }
 
     @Override
