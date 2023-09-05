@@ -2,6 +2,9 @@ package com.michaelvol.ecommerceapi.order;
 
 import com.michaelvol.ecommerceapi.order.dto.GetOrderResponse;
 import com.michaelvol.ecommerceapi.order.dto.GetOrderStatusResponse;
+import com.michaelvol.ecommerceapi.order.dto.UpdateOrderStatusRequest;
+import com.michaelvol.ecommerceapi.order.dto.UpdateOrderStatusResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,12 +39,13 @@ public class OrderController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<GetOrderStatusResponse> updateOrderStatus(@PathVariable Long id,
-                                                                    @RequestBody OrderStatus status) {
-        Order order = orderService.setOrderStatus(id, status);
-        GetOrderStatusResponse response = GetOrderStatusResponse
+    public ResponseEntity<UpdateOrderStatusResponse> updateOrderStatus(@PathVariable Long id,
+                                                                       @Valid @RequestBody UpdateOrderStatusRequest request) {
+        Order order = orderService.setOrderStatus(id, request.getStatus());
+        UpdateOrderStatusResponse response = UpdateOrderStatusResponse
                 .builder()
-                .orderStatus(order.getStatus())
+                .status(order.getStatus())
+                .message("Order status updated successfully to " + order.getStatus().name())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

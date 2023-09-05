@@ -133,7 +133,7 @@ public class CartServiceImpl implements CartService {
                 .build();
 
         order = orderService.save(order);
-        //        clearCart(cart);
+        clearCart(cart);
         return order;
     }
 }

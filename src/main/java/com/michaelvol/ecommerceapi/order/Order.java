@@ -31,7 +31,7 @@ public class Order {
     private Long id;
 
     @Column(name = "products", nullable = false)
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "orders_products",
             joinColumns = @JoinColumn(name = "order_id"),
