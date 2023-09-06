@@ -1,6 +1,7 @@
 package com.michaelvol.ecommerceapi.cart;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.michaelvol.ecommerceapi.cart.cartitem.CartItem;
 import com.michaelvol.ecommerceapi.user.User;
 import jakarta.persistence.*;
@@ -26,6 +27,7 @@ public class Cart {
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "cart")

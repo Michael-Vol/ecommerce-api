@@ -35,6 +35,18 @@ public class CartController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("")
+    public ResponseEntity<GetCartResponse> getCart() {
+        Long cartId = getCartIdFromAuthenticatedUser();
+        Cart cart = cartService.getCartById(cartId);
+        GetCartResponse response = GetCartResponse
+                .builder()
+                .cart(cart)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
     @DeleteMapping("/removeFromCart")
     public ResponseEntity<RemoveFromCartResponse> removeFromCart(@Valid @RequestBody RemoveFromCartRequest request) {
         Long cartId = getCartIdFromAuthenticatedUser();

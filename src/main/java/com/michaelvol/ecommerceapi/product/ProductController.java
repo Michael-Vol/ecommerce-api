@@ -15,7 +15,7 @@ import static com.michaelvol.ecommerceapi.utils.AppConstants.API_BASE_URL;
 public class ProductController {
     private final ProductService productService;
 
-    @PostMapping("/new")
+    @PostMapping("")
     public ResponseEntity<CreateProductResponse> createProduct(@Valid @RequestBody CreateProductRequest createProductRequest) {
         Product product = productService.create(createProductRequest);
         CreateProductResponse response = CreateProductResponse
